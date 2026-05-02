@@ -38,6 +38,12 @@ Sin activar el venv puedes usar siempre:
 python run_all_demos.py
 ```
 
+Interfaz gráfica (ventanas y pestañas):
+
+```bash
+python ma_gui.py
+```
+
 Ejecuta todas las demos. Solo el núcleo original:
 
 ```bash
@@ -64,6 +70,7 @@ from ma_interpolacion import lagrange_eval
 | `ma_algebra_metricas.py` | Normas, Frobenius, determinante, número de condición |
 | `ma_optimizacion.py` | Búsqueda dorada (mínimo unimodal en un intervalo) |
 | `ma_integracion_extras.py` | Punto medio compuesto y Simpson 3/8 compuesto |
+| `ma_gui.py` | Interfaz gráfica (tkinter) para la mayoría de los métodos |
 | `run_all_demos.py` | Ejecuta todas las demos en secuencia |
 | `setup_venv.ps1` / `setup_venv.bat` | Crear o refrescar `.venv` e instalar dependencias |
 | `requirements.txt` | Dependencias (`numpy`) |
