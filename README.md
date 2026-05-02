@@ -32,12 +32,22 @@ from formulas_clase_ma import biseccion, newton_raphson, regla_trapecio
 
 ## Publicar en GitHub
 
-1. Entra en [github.com/new](https://github.com/new) e inicia sesión.
-2. **Repository name:** por ejemplo `formulas-matematica-aplicada` (sin espacios).
-3. Elige **Public**. No marques “Add a README” (ya tienes uno local).
-4. Crea el repositorio y copia la URL HTTPS (p. ej. `https://github.com/TU_USUARIO/formulas-matematica-aplicada.git`).
+### Opción A: GitHub CLI (recomendado si ya tienes `gh`)
 
-En PowerShell, dentro de esta carpeta:
+1. Inicia sesión (solo la primera vez): `gh auth login` y sigue el asistente.
+2. Desde esta carpeta del proyecto:
+
+```powershell
+cd "c:\Users\amdiaz\Desktop\code\Python\v.13.13\Matematica Aplicada"
+gh repo create formulas-matematica-aplicada --public --source=. --remote=origin --push
+```
+
+Cambia `formulas-matematica-aplicada` si quieres otro nombre. Si ya existe un remoto `origin`, elimínalo antes: `git remote remove origin`.
+
+### Opción B: Sitio web de GitHub
+
+1. [github.com/new](https://github.com/new): nombre sugerido `formulas-matematica-aplicada`, repositorio **Public**, sin README inicial.
+2. En PowerShell:
 
 ```powershell
 cd "c:\Users\amdiaz\Desktop\code\Python\v.13.13\Matematica Aplicada"
@@ -45,9 +55,9 @@ git remote add origin https://github.com/TU_USUARIO/NOMBRE_REPO.git
 git push -u origin main
 ```
 
-Sustituye `TU_USUARIO` y `NOMBRE_REPO` por los tuyos. Si GitHub pide autenticación, usa un **Personal Access Token** como contraseña (no la contraseña de la cuenta), o configura [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager).
+Si pide contraseña, usa un **Personal Access Token** o [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager).
 
-Opcional: instala [GitHub CLI](https://cli.github.com/) (`gh`) y podrás crear el remoto desde terminal con `gh repo create`.
+Tras el primer `push`, en GitHub se ejecutará el workflow **CI** (instala `numpy` y corre `python formulas_clase_ma.py`).
 
 ## Licencia
 
