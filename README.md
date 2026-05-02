@@ -7,7 +7,30 @@ Contexto de la clase de referencia: [Clase MA - 27/04/26](https://www.youtube.co
 ## Requisitos
 
 - Python 3.10 o superior recomendado
-- Dependencias: `pip install -r requirements.txt`
+
+### Entorno virtual (recomendado)
+
+Desde la carpeta del proyecto:
+
+```powershell
+.\setup_venv.ps1
+```
+
+O en cmd: `setup_venv.bat`. Eso crea (si no existe) la carpeta **`.venv`**, actualiza **pip** y ejecuta `pip install -r requirements.txt`.
+
+Activa el entorno en PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+En Cursor/VS Code, elige como intérprete de Python: `.venv\Scripts\python.exe`.
+
+Sin activar el venv puedes usar siempre:
+
+```powershell
+.\.venv\Scripts\python.exe run_all_demos.py
+```
 
 ## Uso
 
@@ -42,6 +65,7 @@ from ma_interpolacion import lagrange_eval
 | `ma_optimizacion.py` | Búsqueda dorada (mínimo unimodal en un intervalo) |
 | `ma_integracion_extras.py` | Punto medio compuesto y Simpson 3/8 compuesto |
 | `run_all_demos.py` | Ejecuta todas las demos en secuencia |
+| `setup_venv.ps1` / `setup_venv.bat` | Crear o refrescar `.venv` e instalar dependencias |
 | `requirements.txt` | Dependencias (`numpy`) |
 | `LICENSE` | Licencia MIT |
 | `.github/workflows/ci.yml` | CI: instala dependencias y ejecuta `run_all_demos.py` |
