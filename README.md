@@ -27,6 +27,8 @@ from formulas_clase_ma import biseccion, newton_raphson, regla_trapecio
 |--------|---------------|
 | `formulas_clase_ma.py` | Funciones numéricas y demo |
 | `requirements.txt` | Dependencias (`numpy`) |
+| `LICENSE` | Licencia MIT |
+| `.github/workflows/ci.yml` | CI: instala dependencias y ejecuta la demo |
 
 ## Publicar en GitHub
 
@@ -49,4 +51,4 @@ Opcional: instala [GitHub CLI](https://cli.github.com/) (`gh`) y podrás crear e
 
 ## Licencia
 
-Elige la licencia que prefieras al publicar el repositorio en GitHub (por ejemplo MIT).
+[MIT](LICENSE).
