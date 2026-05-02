@@ -191,5 +191,10 @@ def _demo() -> None:
     print("x =", x_sol)
 
 
+def demo() -> None:
+    """Demo publica (misma salida que al ejecutar el modulo como script)."""
+    _demo()
+
+
 if __name__ == "__main__":
     _demo()

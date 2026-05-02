@@ -20,5 +20,5 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run demo
-        run: python formulas_clase_ma.py
+      - name: Run all demos
+        run: python run_all_demos.py
