@@ -22,6 +22,7 @@ import ma_edo as edo
 import ma_integracion_extras as intex
 import ma_interpolacion as interp
 import ma_minimos_cuadrados as mc
+import ma_regresion_graficos as reggraf
 import ma_optimizacion as opt
 import ma_raices_avanzado as raizx
 
@@ -431,37 +432,105 @@ class MaApp(tk.Tk):
 
     def _build_tab_mc(self, nb: ttk.Notebook) -> None:
         f = ttk.Frame(nb, padding=8)
-        nb.add(f, text="Minimos cuadrados")
-        ttk.Label(f, text="x (coma):").grid(row=0, column=0, sticky=tk.W)
-        e_x = ttk.Entry(f, width=50)
-        e_x.insert(0, "0,1,2,3,4")
-        e_x.grid(row=0, column=1, sticky=tk.W, padx=4)
-        ttk.Label(f, text="y (coma):").grid(row=1, column=0, sticky=tk.W)
-        e_y = ttk.Entry(f, width=50)
-        e_y.insert(0, "1.1,1.9,3.2,3.9,5.1")
-        e_y.grid(row=1, column=1, sticky=tk.W, padx=4)
-        ttk.Label(f, text="Grado polinomio (0=constante, 1=lineal, ...):").grid(row=2, column=0, sticky=tk.W)
-        e_g = ttk.Entry(f, width=6)
-        e_g.insert(0, "1")
-        e_g.grid(row=2, column=1, sticky=tk.W, padx=4)
+        nb.add(f, text="Regresion / MC")
+        lf_u3 = ttk.LabelFrame(f, text="Unidad 3 — Regresion lineal simple (apunte U3)")
+        lf_u3.grid(row=0, column=0, columnspan=2, sticky=tk.EW, pady=(0, 8))
+        ttk.Label(lf_u3, text="X (independiente, coma):").grid(row=0, column=0, sticky=tk.W, padx=4, pady=2)
+        e_x = ttk.Entry(lf_u3, width=52)
+        e_x.insert(0, "200,200,400,400,600,600,700,700,900,900,1000,1000,1000,1200,1200")
+        e_x.grid(row=0, column=1, sticky=tk.W, padx=4, pady=2)
+        ttk.Label(lf_u3, text="Y (dependiente, coma):").grid(row=1, column=0, sticky=tk.W, padx=4, pady=2)
+        e_y = ttk.Entry(lf_u3, width=52)
+        e_y.insert(0, "14,18,16,14,13,14,11,14,10,9,9,13,11,11,7")
+        e_y.grid(row=1, column=1, sticky=tk.W, padx=4, pady=2)
+        ttk.Label(lf_u3, text="Predecir Y para X =").grid(row=2, column=0, sticky=tk.W, padx=4, pady=2)
+        e_pred = ttk.Entry(lf_u3, width=14)
+        e_pred.insert(0, "700")
+        e_pred.grid(row=2, column=1, sticky=tk.W, padx=4, pady=2)
+
         out = self._shared_output(f)
 
-        def run() -> None:
+        def run_u3() -> None:
+            _clear_out(out)
+            try:
+                xs = _parse_floats(e_x.get())
+                ys = _parse_floats(e_y.get())
+                res = mc.regresion_lineal_simple(xs, ys)
+                _out_append(out, f"Modelo: Y_hat = {res.alpha} + ({res.beta}) * X")
+                _out_append(out, f"Interpretacion pendiente: por cada unidad que aumenta X, Y cambia en promedio {res.beta}.")
+                _out_append(out, f"SST = {res.sst:.6g}, SSR = {res.ssr:.6g}, SSE = {res.sse:.6g}")
+                _out_append(out, f"SST = SSR + SSE (check): {res.sst:.6g} ~ {res.ssr + res.sse:.6g}")
+                r2_alt = (1.0 - res.sse / res.sst) if res.sst > 1e-15 else float("nan")
+                _out_append(out, f"R^2 = SSR/SST = {res.r2:.6g}  (tambien 1 - SSE/SST = {r2_alt:.6g})")
+                _out_append(out, f"r (correlacion) = {res.r:.6g}  |  fuerza: {mc.texto_fuerza_correlacion(res.r)}")
+                _out_append(out, f"R^2 = r^2 check: {res.r**2:.6g}")
+                if res.n > 2:
+                    _out_append(out, f"MSE = SSE/(n-2) = {res.mse:.6g}")
+                xv = float(e_pred.get())
+                yp = mc.predecir_y(xv, res.alpha, res.beta)
+                _out_append(out, f"Prediccion en X={xv}: Y_hat = {yp:.6g}")
+            except Exception as ex:
+                messagebox.showerror("Error", str(ex))
+
+        def plot_u3() -> None:
+            try:
+                xs = _parse_floats(e_x.get())
+                ys = _parse_floats(e_y.get())
+                res = mc.regresion_lineal_simple(xs, ys)
+            except Exception as ex:
+                messagebox.showerror("Error", str(ex))
+                return
+            try:
+                from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+            except ImportError:
+                messagebox.showerror("Matplotlib", "Instala matplotlib: pip install matplotlib")
+                return
+            fig = reggraf.figura_dispersion_recta(xs, ys, res, titulo="U3 — Diagrama de dispersion")
+            win = tk.Toplevel(self)
+            win.title("Diagrama de dispersion")
+
+            def on_close() -> None:
+                import matplotlib.pyplot as plt
+
+                plt.close(fig)
+                win.destroy()
+
+            win.protocol("WM_DELETE_WINDOW", on_close)
+            canvas = FigureCanvasTkAgg(fig, master=win)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+            ttk.Button(win, text="Cerrar", command=on_close).pack(pady=4)
+
+        fr_btn = ttk.Frame(lf_u3)
+        fr_btn.grid(row=3, column=1, sticky=tk.W, pady=6)
+        ttk.Button(fr_btn, text="Calcular regresion (U3)", command=run_u3).pack(side=tk.LEFT, padx=2)
+        ttk.Button(fr_btn, text="Ver grafico", command=plot_u3).pack(side=tk.LEFT, padx=2)
+
+        lf_poly = ttk.LabelFrame(f, text="Ajuste polinomico (minimos cuadrados)")
+        lf_poly.grid(row=1, column=0, columnspan=2, sticky=tk.EW)
+        ttk.Label(lf_poly, text="Grado (0=cte, 1=lineal, 2=cuadratico, ...):").grid(row=0, column=0, sticky=tk.W, padx=4, pady=4)
+        e_g = ttk.Entry(lf_poly, width=6)
+        e_g.insert(0, "2")
+        e_g.grid(row=0, column=1, sticky=tk.W, padx=4, pady=4)
+
+        def run_poly() -> None:
             _clear_out(out)
             try:
                 xs = _parse_floats(e_x.get())
                 ys = _parse_floats(e_y.get())
                 g = int(e_g.get())
                 if g == 1:
-                    a0, a1 = mc.minimos_cuadrados_lineal(xs, ys)
-                    _out_append(out, f"Recta: y = {a0} + {a1} * x")
+                    res = mc.regresion_lineal_simple(xs, ys)
+                    _out_append(out, f"[Grado 1] Mismo que U3: alpha={res.alpha}, beta={res.beta}")
                 else:
                     c = mc.minimos_cuadrados_polinomio(xs, ys, g)
-                    _out_append(out, f"Coeficientes (termino constante primero): {c.tolist()}")
+                    _out_append(out, f"Coeficientes [a0..a{g}]: {c.tolist()}")
             except Exception as ex:
                 messagebox.showerror("Error", str(ex))
 
-        ttk.Button(f, text="Ajustar", command=run).grid(row=3, column=1, sticky=tk.W, pady=8)
+        ttk.Button(lf_poly, text="Ajustar polinomio", command=run_poly).grid(row=1, column=1, sticky=tk.W, pady=6)
+
+        f.columnconfigure(1, weight=1)
 
     def _build_tab_optim(self, nb: ttk.Notebook) -> None:
         f = ttk.Frame(nb, padding=8)

@@ -4,6 +4,8 @@ Scripts en Python con fórmulas habituales de **matemática aplicada / métodos 
 
 Contexto de la clase de referencia: [Clase MA - 27/04/26](https://www.youtube.com/watch?v=_SgUUsTz390) (MATEMÁTICA APLICADA LCD).
 
+La **regresión lineal simple** (coeficientes, SST/SSR/SSE, \(R^2\), correlación \(r\), predicción y diagrama de dispersión) sigue el apunte **Unidad 3 — Regresión y correlación lineal** (Lic. Ciencia de Datos, UGR / material de cursado).
+
 ## Requisitos
 
 - Python 3.10 o superior recomendado
@@ -66,14 +68,15 @@ from ma_interpolacion import lagrange_eval
 | `ma_interpolacion.py` | Lineal a trozos y Lagrange |
 | `ma_raices_avanzado.py` | Secante y punto fijo |
 | `ma_edo.py` | Euler, Heun, RK4 para `y' = f(t,y)` escalar |
-| `ma_minimos_cuadrados.py` | Ajuste lineal y polinómico por mínimos cuadrados |
+| `ma_minimos_cuadrados.py` | Regresión lineal simple (U3): \(\hat\alpha\), \(\hat\beta\), SST/SSR/SSE, \(R^2\), \(r\), MSE; ajuste polinómico |
+| `ma_regresion_graficos.py` | Diagrama de dispersión y recta ajustada (matplotlib) |
 | `ma_algebra_metricas.py` | Normas, Frobenius, determinante, número de condición |
 | `ma_optimizacion.py` | Búsqueda dorada (mínimo unimodal en un intervalo) |
 | `ma_integracion_extras.py` | Punto medio compuesto y Simpson 3/8 compuesto |
 | `ma_gui.py` | Interfaz gráfica (tkinter) para la mayoría de los métodos |
 | `run_all_demos.py` | Ejecuta todas las demos en secuencia |
 | `setup_venv.ps1` / `setup_venv.bat` | Crear o refrescar `.venv` e instalar dependencias |
-| `requirements.txt` | Dependencias (`numpy`) |
+| `requirements.txt` | Dependencias: `numpy`, `matplotlib` (gráficos de regresión) |
 | `LICENSE` | Licencia MIT |
 | `.github/workflows/ci.yml` | CI: instala dependencias y ejecuta `run_all_demos.py` |
 
