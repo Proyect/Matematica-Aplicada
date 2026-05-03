@@ -34,6 +34,9 @@ class ResultadoRegresionLineal:
     r2: float
     r: float
     mse: float
+    sxx: float
+    syy: float
+    sxy: float
 
 
 def regresion_lineal_simple(x: np.ndarray, y: np.ndarray) -> ResultadoRegresionLineal:
@@ -110,6 +113,9 @@ def regresion_lineal_simple(x: np.ndarray, y: np.ndarray) -> ResultadoRegresionL
         r2=float(r2),
         r=r,
         mse=mse,
+        sxx=sxx,
+        syy=syy,
+        sxy=sxy,
     )
 
 
